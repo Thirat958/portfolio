@@ -1,21 +1,26 @@
 const themeToggleBtn = document.getElementById("theme-toggle");
 const darkIcon = document.getElementById("theme-toggle-dark-icon");
 const lightIcon = document.getElementById("theme-toggle-light-icon");
+ 
+const savedTheme = localStorage.getItem("color-theme");
+const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
-// 1. Afficher la bonne icône au chargement
-if (document.documentElement.classList.contains("dark")) {
+const isDark = savedTheme === "dark" || (!savedTheme && systemPrefersDark);
+ 
+if (isDark) {
+  document.documentElement.classList.add("dark");
   lightIcon.classList.remove("hidden");
+  darkIcon.classList.add("hidden");
 } else {
+  document.documentElement.classList.remove("dark");
   darkIcon.classList.remove("hidden");
+  lightIcon.classList.add("hidden");
 }
-
-// 2. Écouter le clic sur le bouton
+ 
 themeToggleBtn.addEventListener("click", () => {
-  // On bascule l'icône visible
   darkIcon.classList.toggle("hidden");
   lightIcon.classList.toggle("hidden");
 
-  // Si on est déjà en mode sombre, on passe en clair
   if (document.documentElement.classList.contains("dark")) {
     document.documentElement.classList.remove("dark");
     localStorage.setItem("color-theme", "light");
